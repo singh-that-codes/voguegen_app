@@ -67,13 +67,15 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               AnimatedTextKit(
                 animatedTexts: [
-                  TyperAnimatedText("VogueGen.ai",
-                      textStyle: GoogleFonts.poppins(
-                        color: AppColors.lightPurple,
-                        fontSize: 65.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      speed: Durations.long1),
+                  TyperAnimatedText(
+                    "VogueGen.ai",
+                    textStyle: GoogleFonts.poppins(
+                      color: AppColors.lightPurple,
+                      fontSize: 65.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    speed: Durations.short4,
+                  ),
                 ],
                 repeatForever: true,
               ),
@@ -81,9 +83,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 "Style Innovation, One Prompt at a Time",
                 style: GoogleFonts.poppins(
-                  color: AppColors.purple2,
+                  color: AppColors.darkPurple,
                   fontSize: 30,
-                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                  //fontStyle: FontStyle.italic,
                 ),
               ),
               const SizedBox(height: 25),
@@ -117,10 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              if (_image != null) ...[
-                Image.file(File(_image!.path)),
-                SizedBox(height: 20),
-              ],
+              const SizedBox(
+                height: 20,
+              ),
               ElevatedButton(
                 onPressed: _generateStyles,
                 child: Text('Generate Styles'),
@@ -139,9 +141,120 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              ..._imageUrls
-                  .map((url) => Image.network(url))
-                  .toList(), // Display the fetched images
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        'INPUT IMAGE',
+                        style: GoogleFonts.poppins(
+                          color: AppColors.lightPurple,
+                          fontSize: 35,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      if (_image != null) ...[
+                        Container(
+                          width: 400, // Specify the width of the container
+                          height: 400, // Specify the height of the container
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit
+                                  .cover, // Cover the container potentially cropping the image
+                              image: NetworkImage(_image!
+                                  .path), // Use the image URL from the picker
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                      ],
+                      if (_image == null) ...[
+                        Container(
+                          height: 400,
+                          width: 400,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.black)),
+                          child: Center(
+                            child: AnimatedTextKit(
+                              animatedTexts: [
+                                TypewriterAnimatedText(
+                                  'Please upload an image',
+                                  textStyle: GoogleFonts.poppins(
+                                    fontSize: 25,
+                                    color: AppColors.lightPurple,
+                                  ),
+                                ),
+                              ],
+                              repeatForever: true,
+                            ),
+                          ),
+                        ),
+                      ]
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'GENERATED IMAGE',
+                        style: GoogleFonts.poppins(
+                          color: AppColors.lightPurple,
+                          fontSize: 35,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      if (_imageUrls.isNotEmpty) ...[
+                        Container(
+                          width: 400,
+                          height: 400,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(_imageUrls.first),
+                            ),
+                          ),
+                        ),
+                      ],
+                      if (_imageUrls.isEmpty) ...[
+                        Container(
+                          height: 400,
+                          width: 400,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.black)),
+                          child: Center(
+                            child: AnimatedTextKit(
+                              animatedTexts: [
+                                TypewriterAnimatedText(
+                                  'Fashion Idea -> VogueGEN ',
+                                  textStyle: GoogleFonts.poppins(
+                                    fontSize: 25,
+                                    color: AppColors.lightPurple,
+                                  ),
+                                ),
+                                TypewriterAnimatedText(
+                                  'Input -> AI -> Output',
+                                  textStyle: GoogleFonts.poppins(
+                                    fontSize: 25,
+                                    color: AppColors.lightPurple,
+                                  ),
+                                ),
+                              ],
+                              repeatForever: true,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  )
+                ],
+              )
             ],
           ),
         ),

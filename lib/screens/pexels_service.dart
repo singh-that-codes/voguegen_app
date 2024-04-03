@@ -12,7 +12,7 @@ class PexelsService {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      // Ensure we are safely casting and extracting strings
+
       final List<String> imageUrls = [];
       for (var item in data['photos']) {
         String url = item['src']['medium'];
