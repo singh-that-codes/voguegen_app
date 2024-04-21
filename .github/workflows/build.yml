@@ -16,18 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set Flutter 3.10.6
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.10.6
-
-      - name: Checkout Flutter 3.10.7
-        shell: bash
-        run: |
-          cd ${{ env.FLUTTER_ROOT }};
-          git fetch --tags;
-          git checkout 3.10.7;
-          flutter --version;
+          flutter-version: ">=3.4.0-257.0.dev <4.0.0"
 
       - name: Get dependencies
         run: flutter pub get
