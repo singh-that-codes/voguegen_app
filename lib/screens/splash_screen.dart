@@ -48,8 +48,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   fontWeight: FontWeight.bold,
                 ),
                 speed: const Duration(
-                    milliseconds:
-                        200), // Durations.short4 may need to be defined or replaced
+                  milliseconds: 200,
+                ), // Durations.short4 may need to be defined or replaced
               ),
             ],
             //repeatForever: true,
