@@ -1,30 +1,71 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mockito/mockito.dart';
+import 'package:provider/provider.dart';
+import 'package:voguegen/screens/homescreen.dart';
+import 'package:voguegen/screens/pexels_service.dart';
 
-import 'package:voguegen/main.dart';
+// Mock classes
+class MockImagePicker extends Mock implements ImagePicker {}
+
+class MockPexelsService extends Mock implements PexelsService {}
+
+class MockXFile extends Mock implements XFile {}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('HomeScreen Tests', () {
+    // Mock the dependencies
+    final mockImagePicker = MockImagePicker();
+    final mockPexelsService = MockPexelsService();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    Widget createTestWidget() => MaterialApp(
+          home: Provider<ImagePicker>.value(
+            value: mockImagePicker,
+            child: Provider<PexelsService>.value(
+              value: mockPexelsService,
+              child: HomeScreen(),
+            ),
+          ),
+        );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    testWidgets('Clicking "Pick Image" opens image picker',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+      // Simulate the image picker returning a mock image
+      final mockImage = MockXFile();
+      when(mockImagePicker.pickImage(source: ImageSource.gallery))
+          .thenAnswer((_) async => mockImage);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      // Find and tap the 'Pick Image' button
+      final pickImageButton = find.widgetWithText(ElevatedButton, 'Pick Image');
+      await tester.tap(pickImageButton);
+      await tester.pump(); // Rebuild the widget with the new state
+
+      // Verify the image picker was called
+      verify(mockImagePicker.pickImage(source: ImageSource.gallery)).called(1);
+    });
+
+    testWidgets('Clicking "Generate Styles" triggers image search',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      // Type into the text field
+      await tester.enterText(find.byType(TextField), 'test');
+
+      // Mock the Pexels service response
+      when(mockPexelsService.searchImages(argThat(isNotNull, named: 'query')))
+          .thenAnswer((_) async => ['https://example.com/image.jpg']);
+
+      // Find and tap the 'Generate Styles' button
+      final generateStylesButton =
+          find.widgetWithText(ElevatedButton, 'Generate Styles');
+      await tester.tap(generateStylesButton);
+      await tester.pump(); // Allow time for the state to update
+
+      // Verify the Pexels service was called with a non-null argument
+      verify(mockPexelsService.searchImages(argThat(isNotNull, named: 'query')))
+          .called(1);
+    });
   });
 }
