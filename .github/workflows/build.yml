@@ -22,6 +22,18 @@ jobs:
       - name: Add Flutter to PATH
         run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
 
+      - name: Install Flutter dependencies
+        run: flutter doctor
+
+      - name: Install app dependencies
+        run: flutter pub get --verbose
+
+      - name: Upgrade dependencies
+        run: flutter pub upgrade --verbose
+
+      - name: Run tests
+        run: flutter test
+
       - name: Build web app
         run: flutter build web --verbose
 
