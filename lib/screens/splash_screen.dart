@@ -18,8 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Duration(seconds: 3), // Adjust the time for your needs
       () => Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-            builder: (context) =>
-                const HomeScreen()), // Navigate to your main screen
+            builder: (context) => HomeScreen()), // Navigate to your main screen
       ),
     );
   }

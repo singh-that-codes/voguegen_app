@@ -8,8 +8,6 @@ import 'package:voguegen/colors.dart';
 import 'package:voguegen/screens/pexels_service.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
