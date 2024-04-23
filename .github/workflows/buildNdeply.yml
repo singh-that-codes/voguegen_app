@@ -15,20 +15,33 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache Flutter SDK
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+
       - name: Clone Flutter repository at specified version
         run: git clone https://github.com/flutter/flutter.git -b 3.7.0-9.0.pre --depth 1 ${{ github.workspace }}/flutter
 
       - name: Add Flutter to PATH
         run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
 
+      - name: Cache Dart packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
       - name: Install Flutter dependencies
         run: flutter doctor
 
       - name: Install app dependencies
         run: flutter pub get --verbose
-
-      - name: Upgrade dependencies
-        run: flutter pub upgrade --verbose
 
       - name: Build web app
         run: flutter build web --verbose
