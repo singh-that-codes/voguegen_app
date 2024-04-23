@@ -10,19 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Clone Flutter repository
+        run: git clone -b master --depth 1 https://github.com/flutter/flutter.git $HOME/flutter
+
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "stable"
+        run: export PATH="$HOME/flutter/bin:$PATH"
 
       - name: Get Dependencies
         run: flutter pub get
-
-      - name: Upgrade Flutter SDK
-        run: flutter upgrade --force
 
       - name: Build Web App
         run: flutter build web
