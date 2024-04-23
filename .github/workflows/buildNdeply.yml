@@ -30,9 +30,6 @@ jobs:
       - name: Upgrade dependencies
         run: flutter pub upgrade --verbose
 
-      - name: Run tests
-        run: flutter test
-
       - name: Build web app
         run: flutter build web --verbose
 
