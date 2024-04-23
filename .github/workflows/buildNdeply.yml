@@ -21,6 +21,9 @@ jobs:
       - name: Get Dependencies
         run: flutter pub get
 
+      - name: Upgrade Flutter SDK
+        run: flutter upgrade --force
+
       - name: Build Web App
         run: flutter build web
 
