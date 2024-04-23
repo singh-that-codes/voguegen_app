@@ -19,7 +19,7 @@ jobs:
       - name: Set up Flutter
         run: |
           export PATH="$HOME/flutter/bin:$HOME/flutter/bin/cache/dart-sdk/bin:$PATH"
-
+          source $HOME/flutter/packages/flutter_tools/bin/flutter
       - name: Upgrade Flutter SDK
         run: flutter upgrade --force
 
