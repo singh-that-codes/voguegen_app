@@ -17,7 +17,11 @@ jobs:
         run: git clone -b master --depth 1 https://github.com/flutter/flutter.git $HOME/flutter
 
       - name: Set up Flutter
-        run: export PATH="$HOME/flutter/bin:$PATH"
+        run: |
+          export PATH="$HOME/flutter/bin:$HOME/flutter/bin/cache/dart-sdk/bin:$PATH"
+
+      - name: Upgrade Flutter SDK
+        run: flutter upgrade --force
 
       - name: Get Dependencies
         run: flutter pub get
